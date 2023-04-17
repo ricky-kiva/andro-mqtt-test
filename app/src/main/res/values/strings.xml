@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MQTT Test App</string>
+    <string name="send">Send</string>
+    <string name="msg_sub_title">Enter Message</string>
 </resources>
