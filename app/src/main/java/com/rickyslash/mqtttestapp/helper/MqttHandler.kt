@@ -1,7 +1,10 @@
-package com.rickyslash.mqtttestapp
+package com.rickyslash.mqtttestapp.helper
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.rickyslash.mqtttestapp.R
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
@@ -22,7 +25,8 @@ import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 
 class MqttHandler {
-    lateinit var mqttClient: MqttAndroidClient
+
+    private lateinit var mqttClient: MqttAndroidClient
 
     fun connect(context: Context) {
         val serverURI = "ssl://mdc0bef0.ala.us-east-1.emqxsl.com:8883"
@@ -31,6 +35,10 @@ class MqttHandler {
         mqttClient.setCallback(object : MqttCallback {
 
             override fun messageArrived(topic: String?, message: MqttMessage?) {
+                val intent = Intent(ACTION_MQTT_MESSAGE_RECEIVED).apply {
+                    putExtra("message", message.toString())
+                }
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
                 Log.d(TAG, "Receive message: ${message.toString()} from topic: $topic")
             }
 
@@ -161,6 +169,8 @@ class MqttHandler {
 
     companion object {
         const val TAG = "MQTT Client"
+        const val ACTION_MQTT_MESSAGE_RECEIVED = "mqtt_message_received"
+
     }
 
 }
