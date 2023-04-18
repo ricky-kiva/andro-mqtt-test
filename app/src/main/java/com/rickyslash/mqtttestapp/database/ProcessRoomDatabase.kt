@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Process::class], version = 1)
+@Database(entities = [Process::class], version = 1, exportSchema = false)
 abstract class ProcessRoomDatabase: RoomDatabase() {
     abstract fun processDao(): ProcessDao
 
